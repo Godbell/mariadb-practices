@@ -35,7 +35,9 @@ SELECT COUNT(*) as "부서 개수" FROM departments;
   
 -- 문제6.
 -- 현재 부서 매니저는 몇 명이나 있나요?(역임 매너저는 제외)
-SELECT COUNT(DISTINCT emp_no) FROM dept_manager;
+SELECT COUNT(DISTINCT emp_no)
+FROM dept_manager
+WHERE to_date = '9999-01-01';
  
 -- 문제7.
 -- 전체 부서를 출력하려고 합니다. 순서는 부서이름이 긴 순서대로 출력해 보세요.
@@ -43,7 +45,7 @@ SELECT * FROM departments ORDER BY LENGTH(dept_name) DESC;
 
 -- 문제8.
 -- 현재 급여가 120,000이상 받는 사원은 몇 명이나 있습니까?
-SELECT COUNT(*) FROM salaries WHERE salary >= 120000;
+SELECT COUNT(*) FROM salaries WHERE salary >= 120000 AND to_date = '9999-01-01';
    
 -- 문제9.
 -- 어떤 직책들이 있나요? 중복 없이 이름이 긴 순서대로 출력해 보세요.
@@ -56,7 +58,8 @@ SELECT
 FROM employees
 LEFT JOIN titles
 	ON employees.emp_no=titles.emp_no
-WHERE title='Engineer';
+WHERE title='Engineer'
+	AND to_date = '9999-01-01';
    
 -- 문제11
 -- 사번이 13250(Zeydy)인 직원의 직책 변경 상황을 시간순으로 출력해보세요.

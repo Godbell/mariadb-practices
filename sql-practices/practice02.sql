@@ -14,19 +14,31 @@ FROM salaries;
 -- 마지막으로 신입사원이 들어온 날은 언제 입니까? 다음 형식으로 출력하세요
 -- 예) 2014년 07월 10일
 SELECT 
-	DATE_FORMAT(hire_date, "%Y년 %m월 %d일") AS "마지막으로 신입사원이 들어온 날"
-FROM employees
-ORDER BY hire_date DESC
-LIMIT 1;
+	DATE_FORMAT(MAX(hire_date), "%Y년 %m월 %d일") AS "마지막으로 신입사원이 들어온 날"
+FROM employees;
 
 -- 문제3.
 -- 가장 오래 근속한 직원의 입사일은 언제인가요? 다음 형식으로 출력하세요.
 -- 예) 2014년 07월 10일
 SELECT 
 	DATE_FORMAT(hire_date, "%Y년 %m월 %d일") AS "최장근속자 입사일"
-FROM employees
-ORDER BY hire_date ASC
-LIMIT 1;
+FROM (
+	SELECT
+		salaries.emp_no AS emp_no,
+		DATEDIFF(
+			IF(MAX(to_date) = '9999-01-01', CURRENT_TIMESTAMP, MAX(to_date)), 
+			hire_date
+		) AS period
+	FROM salaries
+	LEFT JOIN employees
+		ON salaries.emp_no = employees.emp_no
+	GROUP BY salaries.emp_no
+) AS work_period
+LEFT JOIN employees
+	ON work_period.emp_no = employees.emp_no
+ORDER BY work_period.period DESC
+LIMIT 1
+;
 
 -- 문제4.
 -- 현재, 이 회사의 평균 연봉은 얼마입니까?
@@ -47,4 +59,7 @@ WHERE to_date = '9999-01-01';
 SELECT
 	YEAR(CURRENT_TIMESTAMP) - YEAR(MIN(birth_date)) AS "최연장자 나이",
 	YEAR(CURRENT_TIMESTAMP) - YEAR(MAX(birth_date)) AS "최연소자 나이"
-FROM employees;
+FROM employees
+LEFT JOIN salaries
+	ON employees.emp_no = salaries.emp_no;
+WHERE to_date = '9999-01-01';
