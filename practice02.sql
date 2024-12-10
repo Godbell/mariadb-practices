@@ -38,3 +38,7 @@ SELECT MAX(salary), MIN(salary) FROM salaries;
 
 -- 문제6.
 -- 현재, 근무중인 사원 중 나이가 제일 어린 사원과 제일 많은 사원의 나이를 각각 출력하세요.
+SELECT
+	YEAR(CURRENT_TIMESTAMP) - YEAR(MIN(birth_date)) AS "최연장자 나이",
+	YEAR(CURRENT_TIMESTAMP) - YEAR(MAX(birth_date)) AS "최연소자 나이"
+FROM employees;
