@@ -93,12 +93,65 @@ WHERE dept_emp.to_date = '9999-01-01'
 
 -- 문제7.
 -- 현재, 직책이 Engineer인 사원 중에서 현재 급여가 40,000 이상인 사원들의 사번, 이름, 급여 그리고 타이틀을 급여가 큰 순서대로 출력하세요.
+SELECT
+	employees.emp_no as "사번",
+	CONCAT(first_name, ' ', last_name) as "이름",
+	salary as "급여",
+	title as "타이틀"
+FROM employees
+LEFT JOIN salaries
+	ON employees.emp_no = salaries.emp_no
+LEFT JOIN titles
+	ON employees.emp_no = titles.emp_no
+WHERE salaries.to_date = '9999-01-01'
+	AND titles.to_date = '9999-01-01'
+	AND title = 'Engineer'
+	AND salary >= 40000
+ORDER BY salary DESC;
 
 -- 문제8.
 -- 현재, 평균급여가 50,000이 넘는 직책을 직책과 평균급여을 평균급여가 큰 순서대로 출력하세요.
+SELECT
+	title as "직책",
+	AVG(salary) as "평균급여"
+FROM employees
+LEFT JOIN salaries
+	ON employees.emp_no = salaries.emp_no
+LEFT JOIN titles
+	ON employees.emp_no = titles.emp_no
+WHERE salaries.to_date = '9999-01-01'
+	AND titles.to_date = '9999-01-01'
+GROUP BY title
+	HAVING AVG(salary) > 50000
+ORDER BY AVG(salary) DESC;
 
 -- 문제9.
 -- 현재, 부서별 평균급여을 평균급여가 큰 순서대로 부서명과 평균연봉을 출력 하세요.
+SELECT
+	dept_name as "부서명",
+	AVG(salary) as "평균연봉"
+FROM dept_emp
+LEFT JOIN salaries
+	ON dept_emp.emp_no = salaries.emp_no
+LEFT JOIN departments
+	ON dept_emp.dept_no = departments.dept_no
+WHERE salaries.to_date = '9999-01-01'
+	AND dept_emp.to_date = '9999-01-01'
+GROUP BY dept_emp.dept_no
+ORDER BY AVG(salary) DESC;
 
 -- 문제10.
 -- 현재, 직책별 평균급여를 평균급여가 큰 직책 순서대로 직책명과 그 평균연봉을 출력 하세요.
+SELECT
+	title as "직책명",
+	AVG(salary) as "평균연봉"
+FROM employees
+LEFT JOIN salaries
+	ON employees.emp_no = salaries.emp_no
+LEFT JOIN titles
+	ON employees.emp_no = titles.emp_no
+WHERE salaries.to_date = '9999-01-01'
+	AND titles.to_date = '9999-01-01'
+GROUP BY title
+ORDER BY AVG(salary) DESC;
+
