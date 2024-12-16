@@ -10,7 +10,7 @@ import java.util.List;
 
 import bookmall.DataSource;
 import bookmall.vo.CartVo;
-public class CartDao {
+public class CartDao extends Dao {
     public void insert(CartVo vo) {
         try (
             Connection connection = DataSource.getConnection();
@@ -28,11 +28,10 @@ public class CartDao {
 
             ResultSet keys = preparedStatement.getGeneratedKeys();
             keys.next();
-            
+
             vo.setNo(keys.getLong(1));
         } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
+            logQueryFailure(e);
         }
     }
 
@@ -65,8 +64,7 @@ public class CartDao {
                 result.add(vo);
             }
         } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
+            logQueryFailure(e);
         }
 
         return result;
@@ -86,8 +84,7 @@ public class CartDao {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
+            logQueryFailure(e);
         }
     }
 }

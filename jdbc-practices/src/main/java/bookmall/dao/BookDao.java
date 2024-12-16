@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 import bookmall.DataSource;
 import bookmall.vo.BookVo;
-public class BookDao {
+public class BookDao extends Dao {
     public void insert(BookVo vo) {
         try (
             Connection connection = DataSource.getConnection();
@@ -43,12 +43,10 @@ public class BookDao {
                 connection.commit();
             } catch (Exception e) {
                 connection.rollback();
-                System.out.println("Rollbacked transaction due to: " + e.getMessage());
-                e.printStackTrace();
+                logResetTransaction(e);
             }
         } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
+            logQueryFailure(e);
         }
     }
 
@@ -76,20 +74,16 @@ public class BookDao {
                 bookCategoryDeleteStatement.setLong(1, no);
                 bookCategoryDeleteStatement.executeUpdate();
 
-                System.out.println("deleted categories...");
-
                 bookDeleteStatement.setLong(1, no);
                 bookDeleteStatement.executeUpdate();
 
                 connection.commit();
             } catch (Exception e) {
                 connection.rollback();
-                System.out.println("Rollbacked transaction due to: " + e.getMessage());
-                e.printStackTrace();
+                logResetTransaction(e);
             }
         } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
+            logQueryFailure(e);
         }
     }
 }

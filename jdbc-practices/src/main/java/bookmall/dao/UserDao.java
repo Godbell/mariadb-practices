@@ -6,12 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 import bookmall.DataSource;
 import bookmall.vo.UserVo;
-public class UserDao {
+public class UserDao extends Dao {
     public void insert(UserVo vo) {
         try (
             Connection connection = DataSource.getConnection();
@@ -35,8 +34,7 @@ public class UserDao {
             keys.next();
             vo.setNo(keys.getLong(1));
         } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
+            logQueryFailure(e);
         }
     }
 
@@ -55,15 +53,9 @@ public class UserDao {
             );
         ) {
             preparedStatement.setLong(1, no);
-            int affectedRowsCount = preparedStatement.executeUpdate();
-
-            if (affectedRowsCount != 1) {
-                System.out.println("Query Anomally: pk based query affected more than one rows");
-                System.out.println("Stack Trace: " + Arrays.toString(Thread.currentThread().getStackTrace()));
-            }
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
+            logQueryFailure(e);
         }
     }
 
@@ -93,8 +85,7 @@ public class UserDao {
                 );
             }
         } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
+            logQueryFailure(e);
         }
 
         return result;

@@ -128,6 +128,7 @@ public class BookMallTest {
         vo = orderDao.findByNoAndUserNo(1234567L, mockUserVo01.getNo());
         assertNull(vo);
         vo = orderDao.findByNoAndUserNo(mockOrderVo.getNo(), mockUserVo01.getNo());
+        assertNotNull(vo);
         assertEquals(mockOrderVo.getNumber(), vo.getNumber());
         assertEquals(mockOrderVo.getPayment(), vo.getPayment());
         assertEquals(mockOrderVo.getStatus(), vo.getStatus());

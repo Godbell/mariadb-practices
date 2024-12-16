@@ -11,7 +11,7 @@ import java.util.List;
 import bookmall.DataSource;
 import bookmall.vo.OrderBookVo;
 import bookmall.vo.OrderVo;
-public class OrderDao {
+public class OrderDao extends Dao {
     public void insert(OrderVo vo) {
         try (
             Connection connection = DataSource.getConnection();
@@ -34,8 +34,7 @@ public class OrderDao {
             keys.next();
             vo.setNo(keys.getLong(1));
         } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
+            logQueryFailure(e);
         }
     }
 
@@ -58,8 +57,7 @@ public class OrderDao {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
+            logQueryFailure(e);
         }
     }
 
@@ -81,8 +79,7 @@ public class OrderDao {
             preparedStatement.setLong(1, orderNo);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
+            logQueryFailure(e);
         }
     }
 
@@ -98,8 +95,7 @@ public class OrderDao {
             preparedStatement.setLong(1, no);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
+            logQueryFailure(e);
         }
     }
 
@@ -140,8 +136,7 @@ public class OrderDao {
                 result.add(vo);
             }
         } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
+            logQueryFailure(e);
         }
 
         return result;
@@ -187,8 +182,7 @@ public class OrderDao {
                 orderVo.setShipping(resultSet.getString("dst"));
             }
         } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            e.printStackTrace();
+            logQueryFailure(e);
         }
 
         return orderVo;
